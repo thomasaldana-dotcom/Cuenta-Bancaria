@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThomBank - Tu Banco Virtual</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}">
+</head>
+
+<body>
+    <header>
+        <h1>Bienvenido al banco ThomBank</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                <li><a href="{% url 'register' %}">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué es ThomBank?</h2>
+            <p>ThomBank es un banco virtual que ofrece servicios financieros a sus clientes.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed voluptatibus, blanditiis sunt
+                exercitationem maiores impedit laudantium aliquid voluptatem eaque, cumque nisi recusandae aspernatur
+                porro molestias quis distinctio obcaecati dicta error. Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Dolore facilis dicta dolorem voluptatum beatae laborum adipisci id! Architecto
+                incidunt deleniti ducimus sapiente, labore cupiditate, consequatur maiores, quos soluta molestiae
+                molestias. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus quas reiciendis quidem
+                itaque sapiente, eius optio aspernatur, reprehenderit sunt nostrum tempora voluptatum? Esse adipisci
+                fuga sint cupiditate pariatur qui consequatur! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Asperiores adipisci ea delectus sunt est facere ad modi vel aperiam, alias molestiae quam error aut.
+                Ipsam voluptatibus quibusdam expedita earum qui. Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Officia adipisci quibusdam, quas recusandae architecto, odio alias eaque voluptatem quis sed
+                cupiditate amet ullam, porro necessitatibus totam impedit exercitationem ut? Iste!</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Continuar</button>
+                </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ThomBank. Todos los derechos reservados.</p>
+    </footer>
+</body>
+
+</html>

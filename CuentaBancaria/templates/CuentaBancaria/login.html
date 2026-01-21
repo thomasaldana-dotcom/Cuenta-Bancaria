@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido al banco ThomBank</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Volver</a></li>
+                <li><a href="{% url 'register' %}">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Formulario de Inicio de Sesión</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Iniciar Sesión</button>
+
+                <a href="">¿Olvidaste tu contraseña?</a>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 ThomBank. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
