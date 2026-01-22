@@ -2,4 +2,8 @@ from django.apps import AppConfig
 
 
 class CuentabancariaConfig(AppConfig):
-    name = 'CuentaBancaria'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "CuentaBancaria"
+
+    def ready(self):
+        import CuentaBancaria.signals

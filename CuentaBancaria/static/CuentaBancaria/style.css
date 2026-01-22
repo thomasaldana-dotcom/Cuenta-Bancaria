@@ -127,3 +127,147 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.9rem;
 }
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Specific Menu Form Alignment */
+.form-menu {
+    margin-left: 0;
+    margin-right: auto;
+    max-width: 100%;
+    /* Allow full width for the menu bar */
+}
+
+/* Menu Bar Layout */
+.menu-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Menu Content Layout */
+.menu-content {
+    max-width: 500px;
+    /* Keep the input area constrained */
+    /* No margin auto here to align left, or auto for center? User asked for left alignment of buttons. Content usually looks better left aligned under it */
+}
+
+label {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+button {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #121212;
+    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(80, 227, 194, 0.3);
+}
+
+/* Specialized Buttons */
+button.btn-menu {
+    background: transparent;
+    background-image: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    width: auto;
+    margin-top: 0;
+    /* Remove top margin in flex row */
+    margin-bottom: 0;
+    border-radius: 20px;
+    /* Rounded pill shape for nav feel */
+}
+
+button.btn-menu:hover {
+    background: var(--primary-color);
+    background-image: none;
+    color: white;
+    /* Text becomes white on hover for solid feel */
+    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+
+.btn-confirm {
+    /* Keep default gradient or customize if needed */
+    width: 100%;
+}
+
+/* Messages */
+.mensaje {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+.mensaje.error {
+    background: rgba(255, 82, 82, 0.1);
+    border: 1px solid #ff5252;
+    color: #ff5252;
+}
+
+.mensaje.success {
+    background: rgba(80, 227, 194, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+/* Links inside forms/sections */
+section a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+section a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}

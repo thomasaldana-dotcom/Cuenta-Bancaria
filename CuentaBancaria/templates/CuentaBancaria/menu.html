@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    <title>Menu</title>
+</head>
+
+<body>
+    <header>
+        <h1>Bienvenido {{ user.cliente.name|default:user.first_name }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'chatbot' %}">Chatbot</a></li>
+                <li><a href="{% url 'tasa_cambio' %}">Tasa de Cambio</a></li>
+                <li><a href="">Historial de Transacciones</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <div>
+                <p>Saldo Actual: ${{ user.cliente.saldo }}</p>
+            </div>
+
+            <div>
+                <p>Inversiones: ${{ user.cliente.inversiones }}</p>
+            </div>
+            <p>Numero de cuenta: {{ user.cliente.numero_cuenta }}</p>
+
+            <h2>Menu</h2>
+            <p>¿Qué deseas hacer?</p>
+            {% if messages %}
+            {% for message in messages %}
+            <p class="mensaje {{ message.tags }}">
+                {{ message }}
+            </p>
+            {% endfor %}
+            {% endif %}
+            <form method="post" class="form-menu">
+                {% csrf_token %}
+                <div class="menu-bar">
+                    <button type="submit" name="accion" value="retirar" class="btn-menu">Retirar</button>
+                    <button type="submit" name="accion" value="depositar" class="btn-menu">Depositar</button>
+                    <button type="submit" name="accion" value="transferencia" class="btn-menu">Transferencia</button>
+                </div>
+
+                <div class="menu-content">
+                    {% if mostrar_retiro %}
+                    <p>¿Cuánto deseas retirar?</p>
+                    <input type="number" name="monto" placeholder="Cantidad:" min="10">
+                    <button type="submit" name="accion" value="confirmar_retiro" class="btn-confirm">Confirmar
+                        Retiro</button>
+                    {% endif %}
+
+                    {% if mostrar_deposito %}
+                    <p>¿Cuánto deseas depositar?</p>
+                    <input type="number" name="monto" placeholder="Cantidad:" min="50">
+                    <button type="submit" name="accion" value="confirmar_deposito" class="btn-confirm">Confirmar
+                        Deposito</button>
+                    {% endif %}
+
+                    {% if mostrar_transferencia %}
+                    <p>¿Cuánto deseas transferir?</p>
+                    <input type="number" name="monto" placeholder="Cantidad:" min="50"><br>
+                    <p>¿A qué cuenta deseas transferir?</p>
+                    <input type="text" name="cuenta_destino" placeholder="Cuenta:">
+                    <button type="submit" name="accion" value="confirmar_transferencia" class="btn-confirm">Confirmar
+                        Transferencia</button>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ThomBank. Todos los derechos reservados.</p>
+    </footer>
+
+
+
+</body>
+
+</html>

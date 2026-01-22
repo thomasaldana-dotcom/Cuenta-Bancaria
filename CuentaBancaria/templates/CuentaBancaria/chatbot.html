@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    <title>Chatbot</title>
+</head>
+<body>
+    <header>
+        <h1>Chatbot</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'menu' %}">Volver</a></li>
+                <li><a href="{% url 'tasa_cambio' %}">Tasa de Cambio</a></li>
+                <li><a href="">Historial de Transacciones</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>ChatBot del banco</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="mensaje_usuario">Escribe tu mensaje:</label>
+                <input type="text" name="mensaje_usuario" id="mensaje_usuario" required placeholder="Escribe tu mensaje">
+                <button type="submit">Enviar</button><br>
+            </form>
+
+            <h3>Respuesta del ChatBot</h3>
+
+            {% if mensaje_usuario %}
+                <p>Tu mensaje: {{ mensaje_usuario }}</p>
+                <p><strong>Respuesta del bot:</strong> <br> {{ respuesta_bot }}</p>
+            {% endif %}
+        </section>
+    </main>
+    
+</body>
+</html>

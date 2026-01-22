@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    <title>Tasa de Cambio</title>
+</head>
+<body>
+    <header>
+        <h1>Tasa de Cambio</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'chatbot' %}">ChatBot</a></li>
+                <li><a href="{% url 'menu' %}">Volver</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Tasa de Cambio</h2>
+            {% if tasas %}
+                <p>
+                    1 USD = {{ tasas.USD }} COP
+                </p>
+                <p>
+                    1 EUR = {{ tasas.EUR }} COP
+                </p>
+                <p>
+                    1 GBP = {{ tasas.GBP }} COP
+                </p>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <label for="monto">Monto en pesos:</label>
+                <input type="number" name="monto" placeholder="Monto en pesos:" min="1">
+                <p>¿A que unidad deseas cambiar?</p>
+                <select name="unidad" id="unidad">
+                    <option value="USD">Dolar</option>
+                    <option value="EUR">Euro</option>
+                    <option value="GBP">Libra Esterlina</option>
+                </select>
+                <button type="submit">Convertir</button><br><br>
+            </form>
+            {% if resultado %}
+                <hr>
+                <h3>Resultado</h3>
+                <p>
+                    {{ monto }} COP =
+                    <strong>{{ resultado }} {{ unidad }}</strong>
+                </p>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="mensaje {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+        </section>
+    </main>
+</body>
+</html>
