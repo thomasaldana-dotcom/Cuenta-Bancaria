@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Cliente
 from django.db import transaction
 from django.conf import settings
+from deep_translator import GoogleTranslator
 
 import random
 import requests
@@ -103,23 +104,60 @@ class RegisterView(View):
 class menuView(LoginRequiredMixin, View):
     login_url = "login"
 
+    #API
+
+    def obtener_frase_api(self):
+        url = "https://dummyjson.com/quotes/random"
+
+        try:
+            response = requests.get(url, timeout = 3, verify = False)
+            data = response.json()
+
+            frase_en = data.get("quote")
+            autor = data.get("author")
+
+            traductor = GoogleTranslator(source='en', target='es')
+            frase_es = traductor.translate(frase_en)
+
+            return{
+                "contenido_en": frase_en,
+                "contenido_es": frase_es,
+                "autor": autor,
+            }
+        except Exception as e:
+            print("error",e)
+            return{
+                "contenido_en": "No se pudo obtener la frase",
+                "contenido_es": "No se pudo obtener la frase",
+                "autor": "ThomBank"
+            }
+
+
     def get(self, request):
+        datos_api = self.obtener_frase_api()
         cliente = Cliente.objects.get(user=request.user)
         context = {
             "cliente": cliente,
             "mostrar_deposito": False,
             "mostrar_retiro": False,
             "mostrar_transferencia": False,
+            "frase_en": datos_api["contenido_en"],
+            "frase_es": datos_api["contenido_es"],
+            "autor": datos_api["autor"],
         }
         return render(request, "CuentaBancaria/menu.html", context)
 
     def post(self, request):
+        datos_api = self.obtener_frase_api()
         cliente = Cliente.objects.get(user=request.user)
         context = {
             "cliente": cliente,
             "mostrar_deposito": False,
             "mostrar_retiro": False,
             "mostrar_transferencia": False,
+            "frase_en": datos_api["contenido_en"],
+            "frase_es": datos_api["contenido_es"],
+            "autor": datos_api["autor"],
         }
 
         if request.method == "POST":
@@ -296,8 +334,20 @@ class ChatbotView(View):
 
 
 
-# Cerrar sesion
 
+
+
+
+
+
+
+
+
+
+
+
+
+# Cerrar sesion
 
 class LogoutView(View):
     def get(self, request):
