@@ -158,8 +158,21 @@ form {
 /* Menu Content Layout */
 .menu-content {
     max-width: 500px;
-    /* Keep the input area constrained */
-    /* No margin auto here to align left, or auto for center? User asked for left alignment of buttons. Content usually looks better left aligned under it */
+}
+
+.inversiones-row form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    max-width: none;
+}
+
+.inversiones-row .saldo-valor {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 label {
@@ -168,7 +181,8 @@ label {
     font-weight: 500;
 }
 
-input {
+input,
+select {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
@@ -179,11 +193,17 @@ input {
     transition: all 0.3s ease;
 }
 
-input:focus {
+input:focus,
+select:focus {
     outline: none;
     border-color: var(--primary-color);
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+select option {
+    background: var(--surface-dark);
+    color: var(--text-primary);
 }
 
 button {
@@ -270,4 +290,68 @@ section a {
 section a:hover {
     color: var(--secondary-color);
     text-decoration: underline;
+}
+
+/* Table Styles */
+.tabla-transacciones {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tabla-transacciones thead {
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.tabla-transacciones th {
+    text-align: left;
+    padding: 1.2rem 1rem;
+    color: var(--secondary-color);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tabla-transacciones td {
+    padding: 1.2rem 1rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.95rem;
+}
+
+.tabla-transacciones tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-transacciones tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+    transition: background 0.3s ease;
+}
+
+/* Specific styling for amounts in table */
+.tabla-transacciones td:nth-child(2) {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .tabla-transacciones {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .tabla-transacciones th,
+    .tabla-transacciones td {
+        padding: 0.8rem;
+        min-width: 120px;
+    }
 }

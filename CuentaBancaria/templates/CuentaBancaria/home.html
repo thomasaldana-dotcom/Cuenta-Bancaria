@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}">
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
 </head>
 
 <body>
@@ -41,10 +41,10 @@
                 elit. Officia adipisci quibusdam, quas recusandae architecto, odio alias eaque voluptatem quis sed
                 cupiditate amet ullam, porro necessitatibus totam impedit exercitationem ut? Iste!</p>
 
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit">Continuar</button>
-                </form>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Continuar</button>
+            </form>
         </section>
     </main>
 

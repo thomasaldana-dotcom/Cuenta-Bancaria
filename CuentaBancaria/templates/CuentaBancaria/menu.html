@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    {% load humanize %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
     <title>Menu</title>
 </head>
 
@@ -16,7 +17,7 @@
             <ul>
                 <li><a href="{% url 'chatbot' %}">Chatbot</a></li>
                 <li><a href="{% url 'tasa_cambio' %}">Tasa de Cambio</a></li>
-                <li><a href="">Historial de Transacciones</a></li>
+                <li><a href="{% url 'historial_transacciones' %}">Historial de Transacciones</a></li>
                 <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
             </ul>
         </nav>
@@ -30,12 +31,17 @@
             <small>{{ autor }}</small>
             <hr><br>
             <div>
-                <p>Saldo Actual: ${{ user.cliente.saldo }}</p>
+                <p>Saldo Actual: ${{ user.cliente.saldo|intcomma }}</p>
             </div>
 
-            <div>
-                <p>Inversiones: ${{ user.cliente.inversiones }}</p>
+            <div class="inversiones-row">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="accion" value="inversiones" class="btn-menu">Inversiones ></button>
+                    <span class="saldo-valor">${{ user.cliente.inversiones|intcomma }}</span>
+                </form>
             </div>
+            <br>
             <p>Numero de cuenta: {{ user.cliente.numero_cuenta }}</p>
 
             <h2>Menu</h2>

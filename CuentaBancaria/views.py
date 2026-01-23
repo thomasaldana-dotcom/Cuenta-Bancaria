@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Cliente
+from .models import Cliente, Transaccion
 from django.db import transaction
 from django.conf import settings
 from deep_translator import GoogleTranslator
@@ -175,14 +175,20 @@ class menuView(LoginRequiredMixin, View):
             elif accion == "transferencia":
                 context["mostrar_transferencia"] = True
 
-            # Logica de transacciones
             elif accion == "confirmar_deposito":
                 if monto:
                     cliente.saldo += int(monto)
                     cliente.save()
+
+                    #Guardar historial de deposito
+
+                    Transaccion.objects.create(
+                        cliente = cliente,
+                        tipo = "Deposito",
+                        monto = int(monto),
+                    )
                     messages.success(request, "Deposito exitoso")
-                    # Opcional: Mantener el form abierto si el usuario quiere depositar mas?
-                    # Por defecto reiniciamos a False (menu principal)
+
                 else:
                     messages.error(request, "Monto inválido")
                     context["mostrar_deposito"] = True
@@ -195,6 +201,15 @@ class menuView(LoginRequiredMixin, View):
                     else:
                         cliente.saldo -= int(monto)
                         cliente.save()
+
+                        #Guardar historial de retiro
+
+                        Transaccion.objects.create(
+                            cliente = cliente,
+                            tipo = "Retiro",
+                            monto = int(monto),
+                        )
+
                         messages.success(request, "Retiro exitoso")
                 else:
                     messages.error(request, "Monto inválido")
@@ -224,7 +239,17 @@ class menuView(LoginRequiredMixin, View):
                                     cliente.save()
                                     cliente_destino.saldo += int(monto)
                                     cliente_destino.save()
+
+                                    #Guardar historial de transferencia
+
+                                    Transaccion.objects.create(
+                                        cliente = cliente,
+                                        tipo = "Transferencia",
+                                        monto = int(monto),
+                                        destinatario = cliente_destino,
+                                    )
                                 messages.success(request, "Transferencia exitosa")
+
                         except Cliente.DoesNotExist:
                             messages.error(request, "No se encontro la cuenta destino")
                             context["mostrar_transferencia"] = True
@@ -233,10 +258,28 @@ class menuView(LoginRequiredMixin, View):
 
 
 
+#Pantalla Historial de Transacciones
+
+class HistorialTransaccionesView(View):
+    login_url = "login"
+
+    def get(self, request):
+        cliente = Cliente.objects.get(user=request.user)
+        transacciones = Transaccion.objects.filter(cliente=cliente).order_by("-fecha")
+
+        context = {
+            "transacciones": transacciones
+        }
+        return render(request, "CuentaBancaria/historial_transacciones.html", context)
+
+
+
+
+
+
+
+
 #APIS
-
-
-
 
 #Tasa de Cambio
 

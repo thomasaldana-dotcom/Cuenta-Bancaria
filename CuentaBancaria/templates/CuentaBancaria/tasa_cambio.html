@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    {% load humanize %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
     <title>Tasa de Cambio</title>
 </head>
+
 <body>
     <header>
         <h1>Tasa de Cambio</h1>
@@ -23,15 +26,15 @@
         <section>
             <h2>Tasa de Cambio</h2>
             {% if tasas %}
-                <p>
-                    1 USD = {{ tasas.USD }} COP
-                </p>
-                <p>
-                    1 EUR = {{ tasas.EUR }} COP
-                </p>
-                <p>
-                    1 GBP = {{ tasas.GBP }} COP
-                </p>
+            <p>
+                1 USD = {{ tasas.USD|intcomma }} COP
+            </p>
+            <p>
+                1 EUR = {{ tasas.EUR|intcomma }} COP
+            </p>
+            <p>
+                1 GBP = {{ tasas.GBP|intcomma }} COP
+            </p>
             {% endif %}
 
             <form method="post">
@@ -47,21 +50,22 @@
                 <button type="submit">Convertir</button><br><br>
             </form>
             {% if resultado %}
-                <hr>
-                <h3>Resultado</h3>
-                <p>
-                    {{ monto }} COP =
-                    <strong>{{ resultado }} {{ unidad }}</strong>
-                </p>
+            <hr>
+            <h3>Resultado</h3>
+            <p>
+                {{ monto|intcomma }} COP =
+                <strong>{{ resultado|intcomma }} {{ unidad }}</strong>
+            </p>
             {% endif %}
 
             {% if messages %}
-                {% for message in messages %}
-                    <p class="mensaje {{ message.tags }}">{{ message }}</p>
-                {% endfor %}
+            {% for message in messages %}
+            <p class="mensaje {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
             {% endif %}
 
         </section>
     </main>
 </body>
+
 </html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    {% load humanize %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
+    <title>Historial de Transacciones</title>
+</head>
+
+<body>
+    <header>
+        <h1>Historial de Transacciones</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'menu' %}">Volver</a></li>
+                <li><a href="{% url 'tasa_cambio' %}">Tasa de Cambio</a></li>
+                <li><a href="{% url 'chatbot' %}">Chatbot</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Historial de Transacciones</h2>
+            {% if transacciones %}
+            <table class="tabla-transacciones">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Destino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaccion in transacciones %}
+                    <tr>
+                        <td>{{ transaccion.tipo }}</td>
+                        <td>${{ transaccion.monto|intcomma }}</td>
+                        <td>{{ transaccion.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ transaccion.fecha|time:"H:i a" }}</td>
+                        <td>{% if transaccion.destinatario %}
+                            Cta: {{ transaccion.destinatario.numero_cuenta }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No hay transacciones</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+
+</html>

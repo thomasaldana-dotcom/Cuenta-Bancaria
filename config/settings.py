@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-#SESSION_COOKIE_AGE = 10
+# SESSION_COOKIE_AGE = 10
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     "CuentaBancaria",
     "social_django",
 ]
@@ -142,13 +143,18 @@ AUTHENTICATION_BACKENDS = (
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-co"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Bogota"
 
 USE_I18N = True
 
 USE_TZ = True
+
+USE_THOUSAND_SEPARATOR = True
+NUMBER_GROUPING = 3
+THOUSAND_SEPARATOR = "."
+DECIMAL_SEPARATOR = ","
 
 
 # Static files (CSS, JavaScript, Images)

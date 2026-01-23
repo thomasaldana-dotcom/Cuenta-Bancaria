@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}">
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
 </head>
+
 <body>
     <header>
         <h1>Bienvenido al banco ThomBank</h1>
@@ -17,7 +19,7 @@
             </ul>
         </nav>
     </header>
-    
+
     <main>
         <section>
             <h2>Formulario de Inicio de Sesión</h2>
@@ -33,18 +35,19 @@
 
                 <a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar sesión con Google</a>
                 {% if messages %}
-                    {% for message in messages %}
-                        <p class="mensaje {{ message.tags }}">
-                            {{ message }}
-                        </p>
-                    {% endfor %}
+                {% for message in messages %}
+                <p class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </p>
+                {% endfor %}
                 {% endif %}
             </form>
         </section>
     </main>
-    
+
     <footer>
         <p>&copy; 2025 ThomBank. Todos los derechos reservados.</p>
     </footer>
 </body>
+
 </html>

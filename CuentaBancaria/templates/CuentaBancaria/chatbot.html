@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
     <title>Chatbot</title>
 </head>
+
 <body>
     <header>
         <h1>Chatbot</h1>
@@ -26,18 +28,20 @@
             <form method="post">
                 {% csrf_token %}
                 <label for="mensaje_usuario">Escribe tu mensaje:</label>
-                <input type="text" name="mensaje_usuario" id="mensaje_usuario" required placeholder="Escribe tu mensaje">
+                <input type="text" name="mensaje_usuario" id="mensaje_usuario" required
+                    placeholder="Escribe tu mensaje">
                 <button type="submit">Enviar</button><br>
             </form>
 
             <h3>Respuesta del ChatBot</h3>
 
             {% if mensaje_usuario %}
-                <p>Tu mensaje: {{ mensaje_usuario }}</p>
-                <p><strong>Respuesta del bot:</strong> <br> {{ respuesta_bot }}</p>
+            <p>Tu mensaje: {{ mensaje_usuario }}</p>
+            <p><strong>Respuesta del bot:</strong> <br> {{ respuesta_bot }}</p>
             {% endif %}
         </section>
     </main>
-    
+
 </body>
+
 </html>
