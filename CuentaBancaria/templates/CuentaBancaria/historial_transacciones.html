@@ -35,6 +35,7 @@
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Destino</th>
+                        <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +50,13 @@
                             {% else %}
                             -
                             {% endif %}
+                        </td>
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="transaccion_id" value="{{ transaccion.id }}">
+                                <button type="submit">🗑️</button>
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}

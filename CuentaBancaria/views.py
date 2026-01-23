@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -258,6 +258,8 @@ class menuView(LoginRequiredMixin, View):
 
 
 
+
+
 #Pantalla Historial de Transacciones
 
 class HistorialTransaccionesView(View):
@@ -272,10 +274,14 @@ class HistorialTransaccionesView(View):
         }
         return render(request, "CuentaBancaria/historial_transacciones.html", context)
 
+    def post(self, request):
+        transaccion_id = request.POST.get("transaccion_id")
 
-
-
-
+        if transaccion_id:
+            transaccion = get_object_or_404(Transaccion, id=transaccion_id, cliente__user=request.user)
+            transaccion.delete()
+            messages.success(request, "Transaccion eliminada exitosamente")
+            return redirect("historial_transacciones")
 
 
 
