@@ -55,6 +55,14 @@
             {% endif %}
             <form method="post" class="form-menu">
                 {% csrf_token %}
+
+                {% if mostrar_retiro %}
+                <button type="submit" name="accion" value="confirmar_retiro" style="display: none;"></button>
+                {% elif mostrar_deposito %}
+                <button type="submit" name="accion" value="confirmar_deposito" style="display: none;"></button>
+                {% elif mostrar_transferencia %}
+                <button type="submit" name="accion" value="confirmar_transferencia" style="display: none;"></button>
+                {% endif %}
                 <div class="menu-bar">
                     <button type="submit" name="accion" value="retirar" class="btn-menu">Retirar</button>
                     <button type="submit" name="accion" value="depositar" class="btn-menu">Depositar</button>

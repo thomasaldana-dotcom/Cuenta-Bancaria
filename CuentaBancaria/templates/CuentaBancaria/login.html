@@ -31,9 +31,10 @@
                 <input type="password" id="password" name="password" required>
                 <button type="submit">Iniciar Sesión</button>
 
-                <a href="">¿Olvidaste tu contraseña?</a>
-
                 <a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar sesión con Google</a>
+
+                <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
+
                 {% if messages %}
                 {% for message in messages %}
                 <p class="mensaje {{ message.tags }}">
