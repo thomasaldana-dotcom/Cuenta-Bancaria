@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CuentaBancaria/style.css' %}?v=6">
+    <title>Completar Perfil</title>
+</head>
+<body>
+    <header>
+        <h1>Completar Perfil</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'menu' %}">Volver</a></li>
+                <li><a href="{% url 'register' %}">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Completar Perfil</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="name">Nombre:</label>
+                <input type="text" name="name" id="name" required placeholder="Ingresa tu nombre">
+                <br>
+                <label for="lastname">Apellido:</label>
+                <input type="text" name="lastname" id="lastname" required placeholder="Ingresa tu apellido">
+                <br>
+                <label for="age">Edad:</label>
+                <input type="number" name="age" id="age" required placeholder="Ingresa tu edad">
+                <br>
+                <label for="password">Contraseña:</label>
+                <input type="password" name="password" id="password" required placeholder="Ingresa tu contraseña">
+                <br>
+                <label for="password2">Confirmar Contraseña:</label>
+                <input type="password" name="password2" id="password2" required placeholder="Confirma tu contraseña">
+                <br>
+                <button type="submit">Completar Perfil</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -10,4 +10,5 @@ urlpatterns = [
     path('tasa_cambio/', views.TasaCambioView.as_view(), name='tasa_cambio'),
     path('chatbot/', views.ChatbotView.as_view(), name='chatbot'),
     path('historial_transacciones/', views.HistorialTransaccionesView.as_view(), name='historial_transacciones'),
+    path('completar_perfil/', views.CompletarPerfilView.as_view(), name='completar_perfil'),
 ]

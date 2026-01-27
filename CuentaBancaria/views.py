@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Cliente, Transaccion
 from django.db import transaction
@@ -134,8 +134,11 @@ class menuView(LoginRequiredMixin, View):
 
 
     def get(self, request):
-        datos_api = self.obtener_frase_api()
         cliente = Cliente.objects.get(user=request.user)
+        if cliente.age == 0:
+            return redirect('completar_perfil')
+
+        datos_api = self.obtener_frase_api()
         context = {
             "cliente": cliente,
             "mostrar_deposito": False,
@@ -284,6 +287,41 @@ class HistorialTransaccionesView(View):
             return redirect("historial_transacciones")
 
 
+#Pantalla Completar Perfil
+
+class CompletarPerfilView(View):
+    def get(self, request):
+        return render(request, "CuentaBancaria/completar_perfil.html")
+
+    def post(self, request):
+        name = request.POST.get("name")
+        lastname = request.POST.get("lastname")
+        age = request.POST.get("age")
+        password = request.POST.get("password")
+        password2 = request.POST.get("password2")
+
+        if password != password2:
+            messages.error(request, "Las contraseñas no coinciden")
+            return render(request, "CuentaBancaria/completar_perfil.html")
+
+        cliente = Cliente.objects.get(user=request.user)
+        cliente.name = name
+        cliente.lastname = lastname
+        cliente.age = age
+        cliente.save()
+
+        user = request.user
+        correo_google = user.email
+        user.username = correo_google
+        user.set_password(password)
+        user.save()
+        
+        update_session_auth_hash(request, user)
+
+        messages.success(request, "Perfil completado exitosamente")
+        return redirect("menu")
+
+
 
 #APIS
 
@@ -317,7 +355,6 @@ class TasaCambioView(View):
         response = requests.get(url)
         data = response.json()
 
-        # invertir tasas para que sea: 1 USD = X COP
         tasas = {
             "USD": round(1 / data["rates"]["USD"], 2),
             "EUR": round(1 / data["rates"]["EUR"], 2),
