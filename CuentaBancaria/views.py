@@ -63,8 +63,6 @@ class RegisterView(View):
         password = request.POST.get("password")
         password2 = request.POST.get("password2")
 
-        numero_cuenta = random.randint(1000000000, 9999999999)
-
         if password != password2:
             messages.error(request, "Las contraseñas no coinciden")
             return redirect("register")
@@ -83,15 +81,11 @@ class RegisterView(View):
             last_name=lastname,
         )
 
-        Cliente.objects.create(
-            user=user,
-            email=email,
-            age=age,
-            name=name,
-            lastname=lastname,
-            numero_cuenta=numero_cuenta,
-            saldo=0,
-        )
+        # El Cliente se crea automáticamente vía signals.py (post_save)
+        # Solo necesitamos actualizar el campo 'age' y cualquier otro campo que no esté en el signal
+        cliente = Cliente.objects.get(user=user)
+        cliente.age = age
+        cliente.save()
 
         messages.success(request, "Usuario creado correctamente")
 
@@ -104,39 +98,38 @@ class RegisterView(View):
 class menuView(LoginRequiredMixin, View):
     login_url = "login"
 
-    #API
+    # API
 
     def obtener_frase_api(self):
         url = "https://dummyjson.com/quotes/random"
 
         try:
-            response = requests.get(url, timeout = 3, verify = False)
+            response = requests.get(url, timeout=3, verify=False)
             data = response.json()
 
             frase_en = data.get("quote")
             autor = data.get("author")
 
-            traductor = GoogleTranslator(source='en', target='es')
+            traductor = GoogleTranslator(source="en", target="es")
             frase_es = traductor.translate(frase_en)
 
-            return{
+            return {
                 "contenido_en": frase_en,
                 "contenido_es": frase_es,
                 "autor": autor,
             }
         except Exception as e:
-            print("error",e)
-            return{
+            print("error", e)
+            return {
                 "contenido_en": "No se pudo obtener la frase",
                 "contenido_es": "No se pudo obtener la frase",
-                "autor": "ThomBank"
+                "autor": "ThomBank",
             }
-
 
     def get(self, request):
         cliente = Cliente.objects.get(user=request.user)
         if cliente.age == 0:
-            return redirect('completar_perfil')
+            return redirect("completar_perfil")
 
         datos_api = self.obtener_frase_api()
         context = {
@@ -183,14 +176,15 @@ class menuView(LoginRequiredMixin, View):
                     cliente.saldo += int(monto)
                     cliente.save()
 
-                    #Guardar historial de deposito
+                    # Guardar historial de deposito
 
                     Transaccion.objects.create(
-                        cliente = cliente,
-                        tipo = "Deposito",
-                        monto = int(monto),
+                        cliente=cliente,
+                        tipo="Deposito",
+                        monto=int(monto),
                     )
                     messages.success(request, "Deposito exitoso")
+                    return redirect("menu")
 
                 else:
                     messages.error(request, "Monto inválido")
@@ -205,15 +199,16 @@ class menuView(LoginRequiredMixin, View):
                         cliente.saldo -= int(monto)
                         cliente.save()
 
-                        #Guardar historial de retiro
+                        # Guardar historial de retiro
 
                         Transaccion.objects.create(
-                            cliente = cliente,
-                            tipo = "Retiro",
-                            monto = int(monto),
+                            cliente=cliente,
+                            tipo="Retiro",
+                            monto=int(monto),
                         )
 
                         messages.success(request, "Retiro exitoso")
+                        return redirect("menu")
                 else:
                     messages.error(request, "Monto inválido")
                     context["mostrar_retiro"] = True
@@ -243,15 +238,16 @@ class menuView(LoginRequiredMixin, View):
                                     cliente_destino.saldo += int(monto)
                                     cliente_destino.save()
 
-                                    #Guardar historial de transferencia
+                                    # Guardar historial de transferencia
 
                                     Transaccion.objects.create(
-                                        cliente = cliente,
-                                        tipo = "Transferencia",
-                                        monto = int(monto),
-                                        destinatario = cliente_destino,
+                                        cliente=cliente,
+                                        tipo="Transferencia",
+                                        monto=int(monto),
+                                        destinatario=cliente_destino,
                                     )
                                 messages.success(request, "Transferencia exitosa")
+                                return redirect("menu")
 
                         except Cliente.DoesNotExist:
                             messages.error(request, "No se encontro la cuenta destino")
@@ -260,10 +256,8 @@ class menuView(LoginRequiredMixin, View):
         return render(request, "CuentaBancaria/menu.html", context)
 
 
+# Pantalla Historial de Transacciones
 
-
-
-#Pantalla Historial de Transacciones
 
 class HistorialTransaccionesView(View):
     login_url = "login"
@@ -272,22 +266,23 @@ class HistorialTransaccionesView(View):
         cliente = Cliente.objects.get(user=request.user)
         transacciones = Transaccion.objects.filter(cliente=cliente).order_by("-fecha")
 
-        context = {
-            "transacciones": transacciones
-        }
+        context = {"transacciones": transacciones}
         return render(request, "CuentaBancaria/historial_transacciones.html", context)
 
     def post(self, request):
         transaccion_id = request.POST.get("transaccion_id")
 
         if transaccion_id:
-            transaccion = get_object_or_404(Transaccion, id=transaccion_id, cliente__user=request.user)
+            transaccion = get_object_or_404(
+                Transaccion, id=transaccion_id, cliente__user=request.user
+            )
             transaccion.delete()
             messages.success(request, "Transaccion eliminada exitosamente")
             return redirect("historial_transacciones")
 
 
-#Pantalla Completar Perfil
+# Pantalla Completar Perfil
+
 
 class CompletarPerfilView(View):
     def get(self, request):
@@ -315,17 +310,16 @@ class CompletarPerfilView(View):
         user.username = correo_google
         user.set_password(password)
         user.save()
-        
+
         update_session_auth_hash(request, user)
 
         messages.success(request, "Perfil completado exitosamente")
         return redirect("menu")
 
 
+# APIS
 
-#APIS
-
-#Tasa de Cambio
+# Tasa de Cambio
 
 
 class TasaCambioView(View):
@@ -361,14 +355,11 @@ class TasaCambioView(View):
             "GBP": round(1 / data["rates"]["GBP"], 2),
         }
 
-        return {
-            "tasas": tasas
-        }
+        return {"tasas": tasas}
 
 
+# Chatbot
 
-
-#Chatbot
 
 class ChatbotView(View):
     def get(self, request):
@@ -378,14 +369,10 @@ class ChatbotView(View):
         mensaje_usuario = request.POST.get("mensaje_usuario")
         respuesta_bot = self.obtener_respuesta_chat(mensaje_usuario)
 
-        context = {
-            "mensaje_usuario": mensaje_usuario,
-            "respuesta_bot": respuesta_bot
-        }
+        context = {"mensaje_usuario": mensaje_usuario, "respuesta_bot": respuesta_bot}
 
         return render(request, "CuentaBancaria/chatbot.html", context)
 
-    
     def obtener_respuesta_chat(self, mensaje_usuario):
         url = "https://api.cerebras.ai/v1/chat/completions"
 
@@ -397,7 +384,10 @@ class ChatbotView(View):
         data = {
             "model": "llama3.1-8b",
             "messages": [
-                {"role": "system", "content": "Eres un asistente útil para un banco y das consejos financieros simples."},
+                {
+                    "role": "system",
+                    "content": "Eres un asistente útil para un banco y das consejos financieros simples.",
+                },
                 {"role": "user", "content": mensaje_usuario},
             ],
             "temperature": 0.7,
@@ -419,21 +409,8 @@ class ChatbotView(View):
             return "El bot no pudo responder ahora mismo."
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Cerrar sesion
+
 
 class LogoutView(View):
     def get(self, request):

@@ -39,6 +39,11 @@
                 <input type="password" name="password2" id="password2" required placeholder="Confirma tu contraseña">
                 <br>
                 <button type="submit">Completar Perfil</button>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </form>
         </section>
     </main>
